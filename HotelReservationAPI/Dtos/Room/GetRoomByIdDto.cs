@@ -4,6 +4,7 @@ namespace HotelReservationAPI.Dtos.Room
 {
     public class GetRoomByIdDto
     {
+        public int ID { get; set; }
         public RoomType Type { get; set; }
         public int Price { get; set; }
         public int Number { get; set; }

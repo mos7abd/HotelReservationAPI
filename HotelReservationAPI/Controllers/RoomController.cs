@@ -13,9 +13,9 @@ namespace HotelReservationAPI.Controllers
     public class RoomController : ControllerBase
     {
         RoomService _roomService;
-        public RoomController()
+        public RoomController(RoomService roomService)
         {
-            _roomService=new RoomService();
+            _roomService= roomService;
         }
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAvaliabiltyRoom()
