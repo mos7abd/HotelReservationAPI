@@ -1,7 +1,10 @@
 
 using AutoMapper;
+using HotelReservationAPI.Data;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
 using HotelReservationAPI.Profiles;
+using HotelReservationAPI.Repositoried;
 using HotelReservationAPI.Services;
 
 namespace HotelReservationAPI
@@ -11,6 +14,8 @@ namespace HotelReservationAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<Context>();
+            builder.Services.AddScoped<GeneralRepository<Room>>();
             builder.Services.AddScoped<RoomService>();
             builder.Services.AddAutoMapper(typeof(RoomProfile).Assembly);
 

@@ -2,7 +2,7 @@
 {
     public class Reservation:BaseModel
     {
-        public DateTime ChekIn { get; set; }
+        public DateTime CheckIn { get; set; }
         public DateTime CheckOut { get; set; }
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }

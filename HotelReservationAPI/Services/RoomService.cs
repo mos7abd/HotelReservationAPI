@@ -3,17 +3,16 @@ using HotelReservationAPI.Enum;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Repositoried;
-using HotelReservationAPI.ViewModels.Room;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace HotelReservationAPI.Services
 {
     public class RoomService
     {
         GeneralRepository<Room> _roomRepo;
-        public RoomService()
+        public RoomService(GeneralRepository<Room> generalRepository)
         {
-            _roomRepo=new GeneralRepository<Room>();
+            _roomRepo= generalRepository;
         }
         public IEnumerable<GetAllRoomDto> GetAllAvailableRooms()
         {
@@ -38,7 +37,7 @@ namespace HotelReservationAPI.Services
             var updatedRoom = updateRoomDto.Map<Room>();
             _roomRepo.UpdateInclude(updatedRoom,
                 nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status));
+                nameof(Room.Number), nameof(Room.Status), nameof(Room.Pictuers));
         }
         public void Delete(int Id)
         {

@@ -11,15 +11,15 @@ namespace HotelReservationAPI.Repositoried
         protected Context _context;
         protected DbSet<T> _dbSet;
 
-        public GeneralRepository()
+        public GeneralRepository(Context context)
         {
-            _context = new Context();
+            _context = context;
             _dbSet = _context.Set<T>();
         }
 
         public IQueryable<T> GetAll()
         {
-            return _dbSet.Where(c => !c.Deleted);
+            return _dbSet;
         }
 
         public IQueryable<T> Get(Expression<Func<T, bool>> predicate)
@@ -30,15 +30,16 @@ namespace HotelReservationAPI.Repositoried
         public async Task<T> GetByID(int id)
         {
             return await _dbSet
-                .Where(c => !c.Deleted && c.ID == id)
+                .Where(c => c.ID == id)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<T> GetByIDWithTracking(int id)
         {
             return await _dbSet
-                .Where(c => !c.Deleted && c.ID == id)
+                .Where(c => c.ID == id)
                 .AsTracking()
+                .AsQueryable()
                 .FirstOrDefaultAsync();
         }
 
@@ -61,13 +62,13 @@ namespace HotelReservationAPI.Repositoried
         public async void Delete(int id)
         {
             var crs = await GetByIDWithTracking(id);
-            crs.Deleted = true;
+            crs.isDeleted = true;
             _context.SaveChanges();
         }
 
         public void UpdateInclude(T entity, params string[] modifiedProperties)
         {
-            if (!_dbSet.Any(x => x.ID == entity.ID && !x.Deleted))
+            if (!_dbSet.Any(x => x.ID == entity.ID))
                 return;
 
             var local = _dbSet.Local.FirstOrDefault(x => x.ID == entity.ID);
