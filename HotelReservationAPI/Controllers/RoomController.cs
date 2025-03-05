@@ -1,6 +1,8 @@
 ﻿using AutoMapper.QueryableExtensions;
 using HotelReservationAPI.Dtos.Room;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
+using HotelReservationAPI.ResponseModels;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels.Room;
 using Microsoft.AspNetCore.Http;
@@ -18,38 +20,39 @@ namespace HotelReservationAPI.Controllers
             _roomService= roomService;
         }
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAllAvaliabiltyRoom()
+        public async Task<ResponseViewModel<IQueryable<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom()
         {
             var rooms = _roomService.GetAllAvailableRooms()
                 .AsQueryable().Project<GetAllRoomViewModel>();
 
-            return Ok(rooms);
+            return ResponseViewModel<IQueryable<GetAllRoomViewModel>>.Success(rooms);
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoomById(int id)
+        public async Task<ResponseViewModel<GetRoomByIdViewModel>> GetRoomById(int id)
         {
             var room = _roomService.GetRoomById(id).Map<GetRoomByIdViewModel>();
-            return Ok(room);
+
+            return ResponseViewModel<GetRoomByIdViewModel>.Success(room);
         }
         [HttpPost]
-        public bool Add(AddRoomViewModel addRoomViewModel)
+        public ResponseViewModel<bool> Add(AddRoomViewModel addRoomViewModel)
         {
               var newRoomDto=addRoomViewModel.Map<AddRoomDto>();
             _roomService.Add(newRoomDto);
-            return true;
+            return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]
-        public bool Update(UpdateRoomViewModel updateRoomViewModel)
+        public ResponseViewModel<bool> Update(UpdateRoomViewModel updateRoomViewModel)
         {
            var updateRoomDto= updateRoomViewModel.Map<UpdateRoomDto>();
             _roomService.Update(updateRoomDto);
-            return true;
+            return ResponseViewModel<bool>.Success(true);
         }
         [HttpDelete]
-        public async Task<bool> Delete(int id)
+        public async Task<ResponseViewModel<bool>> Delete(int id)
         {
             _roomService.Delete(id);
-            return true;
+            return ResponseViewModel<bool>.Success(true);
         }
     }
 }

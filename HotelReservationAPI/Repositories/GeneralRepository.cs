@@ -39,7 +39,6 @@ namespace HotelReservationAPI.Repositoried
             return await _dbSet
                 .Where(c => c.ID == id)
                 .AsTracking()
-                .AsQueryable()
                 .FirstOrDefaultAsync();
         }
 
