@@ -37,7 +37,7 @@ namespace HotelReservationAPI.Services
             var updatedRoom = updateRoomDto.Map<Room>();
             _roomRepo.UpdateInclude(updatedRoom,
                 nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status), nameof(Room.Pictuers));
+                nameof(Room.Number), nameof(Room.Status));
         }
         public void Delete(int Id)
         {
