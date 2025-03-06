@@ -2,6 +2,7 @@
 using AutoMapper;
 using HotelReservationAPI.Data;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Middlewares;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Profiles;
 using HotelReservationAPI.Repositoried;
@@ -27,9 +28,14 @@ namespace HotelReservationAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<CustomerFakeDataService>();
+            builder.Services.AddScoped<GlobalErrorHandlerMiddleware>();
+            builder.Services.AddScoped<TransactionMiddleware>();
+
             var app = builder.Build();
             AutoMaperHelper.Mapper = app.Services.GetService<IMapper>();
-
+            app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+            app.UseMiddleware<TransactionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

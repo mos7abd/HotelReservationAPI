@@ -31,13 +31,18 @@ namespace HotelReservationAPI.Services
         {
             var newRoom = addRoomDto.Map<Room>();
             _roomRepo.Add(newRoom);
+            _roomRepo.SaveChanges();
+            // Add room Facilities
+
+            // Add room images
+
         }
         public void Update(UpdateRoomDto updateRoomDto)
         {
             var updatedRoom = updateRoomDto.Map<Room>();
             _roomRepo.UpdateInclude(updatedRoom,
                 nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status), nameof(Room.Pictuers));
+                nameof(Room.Number), nameof(Room.Status));//, nameof(Room.Pictuers));
         }
         public void Delete(int Id)
         {
@@ -45,3 +50,5 @@ namespace HotelReservationAPI.Services
         }
     }
 }
+
+// Add Reservation <= endpoint => Add reser. / Send mail / create payment / add loyality points

@@ -2,6 +2,8 @@
 using HotelReservationAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 using System.Linq.Expressions;
 
 namespace HotelReservationAPI.Repositoried
@@ -10,7 +12,7 @@ namespace HotelReservationAPI.Repositoried
     {
         protected Context _context;
         protected DbSet<T> _dbSet;
-
+        IDbContextTransaction transaction = null;
         public GeneralRepository(Context context)
         {
             _context = context;
@@ -43,10 +45,35 @@ namespace HotelReservationAPI.Repositoried
                 .FirstOrDefaultAsync();
         }
 
+        public IDbContextTransaction BeginTransaction()
+        {
+            if (transaction is null)
+                transaction = _context.Database.BeginTransaction();
+
+            return transaction;
+        }
+
+        public void Commit()
+        {
+            transaction?.Commit();
+        }
+
+        public void Rollback()
+        {
+            transaction?.Rollback();
+            transaction = null;
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
+        }
+
         public void Add(T entity)
         {
             _dbSet.Add(entity);
-            _context.SaveChanges();
+            //_context.SaveChanges();
+
         }
         public void AddRange(IEnumerable<T> entities)
         {

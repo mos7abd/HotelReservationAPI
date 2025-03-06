@@ -1,22 +1,33 @@
 ﻿using AutoMapper.QueryableExtensions;
 using HotelReservationAPI.Dtos.Room;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
 using HotelReservationAPI.Services;
+using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Room;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RoomController : ControllerBase
     {
         RoomService _roomService;
-        public RoomController(RoomService roomService)
+        CustomerFakeDataService _fakeDataService;
+        public RoomController(RoomService roomService, CustomerFakeDataService fakeDataService)
         {
             _roomService= roomService;
+            _fakeDataService= fakeDataService;
         }
+
+        [HttpGet]
+        public IEnumerable<CutomerViewModel> GetCustomers()
+        {
+            return _fakeDataService.GetData();
+        }
+
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAllAvaliabiltyRoom()
         {
@@ -36,6 +47,7 @@ namespace HotelReservationAPI.Controllers
         {
               var newRoomDto=addRoomViewModel.Map<AddRoomDto>();
             _roomService.Add(newRoomDto);
+
             return true;
         }
         [HttpPut]
