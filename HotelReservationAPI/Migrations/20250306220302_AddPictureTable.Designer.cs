@@ -4,6 +4,7 @@ using HotelReservationAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelReservationAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250306220302_AddPictureTable")]
+    partial class AddPictureTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,7 +209,7 @@ namespace HotelReservationAPI.Migrations
             modelBuilder.Entity("HotelReservationAPI.Models.Picture", b =>
                 {
                     b.HasOne("HotelReservationAPI.Models.Room", "Room")
-                        .WithMany("Pictures")
+                        .WithMany("Picturs")
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -264,7 +267,7 @@ namespace HotelReservationAPI.Migrations
 
             modelBuilder.Entity("HotelReservationAPI.Models.Room", b =>
                 {
-                    b.Navigation("Pictures");
+                    b.Navigation("Picturs");
 
                     b.Navigation("Reservations");
 
