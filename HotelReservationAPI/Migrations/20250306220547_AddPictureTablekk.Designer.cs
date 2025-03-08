@@ -4,6 +4,7 @@ using HotelReservationAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelReservationAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250306220547_AddPictureTablekk")]
+    partial class AddPictureTablekk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,6 +36,9 @@ namespace HotelReservationAPI.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -40,9 +46,6 @@ namespace HotelReservationAPI.Migrations
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -60,12 +63,12 @@ namespace HotelReservationAPI.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -112,10 +115,10 @@ namespace HotelReservationAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<DateTime>("CheckIn")
+                    b.Property<DateTime>("CheckOut")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CheckOut")
+                    b.Property<DateTime>("ChekIn")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -124,11 +127,11 @@ namespace HotelReservationAPI.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -150,6 +153,9 @@ namespace HotelReservationAPI.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
@@ -161,9 +167,6 @@ namespace HotelReservationAPI.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 
@@ -181,6 +184,9 @@ namespace HotelReservationAPI.Migrations
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("FacilityId")
                         .HasColumnType("int");
 
@@ -190,9 +196,6 @@ namespace HotelReservationAPI.Migrations
 
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("isDeleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("ID");
 

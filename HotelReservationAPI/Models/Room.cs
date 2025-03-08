@@ -8,9 +8,9 @@ namespace HotelReservationAPI.Models
         public int Price { get; set; }
         public int Number { get; set; }
         public RoomStatus Status { get; set; }
-        //public ICollection<string>? Pictuers { get; set; }
         public IEnumerable<RoomFacility> RoomFacilities { get; set; }
         public ICollection<Reservation> Reservations { get; set; }
+        public ICollection<Picture> Pictures { get; set; }
 
 
     }
