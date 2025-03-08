@@ -4,6 +4,7 @@ using HotelReservationAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelReservationAPI.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250302211445_isDeleted")]
+    partial class isDeleted
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,38 +75,6 @@ namespace HotelReservationAPI.Migrations
                     b.ToTable("Facilities");
                 });
 
-            modelBuilder.Entity("HotelReservationAPI.Models.Picture", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("RoomId");
-
-                    b.ToTable("Pictures");
-                });
-
             modelBuilder.Entity("HotelReservationAPI.Models.Reservation", b =>
                 {
                     b.Property<int>("ID")
@@ -153,6 +124,9 @@ namespace HotelReservationAPI.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<string>("Pictuers")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Price")
                         .HasColumnType("int");
 
@@ -184,10 +158,6 @@ namespace HotelReservationAPI.Migrations
                     b.Property<int>("FacilityId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
@@ -201,17 +171,6 @@ namespace HotelReservationAPI.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("RoomFacility");
-                });
-
-            modelBuilder.Entity("HotelReservationAPI.Models.Picture", b =>
-                {
-                    b.HasOne("HotelReservationAPI.Models.Room", "Room")
-                        .WithMany("Pictures")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("HotelReservationAPI.Models.Reservation", b =>
@@ -264,8 +223,6 @@ namespace HotelReservationAPI.Migrations
 
             modelBuilder.Entity("HotelReservationAPI.Models.Room", b =>
                 {
-                    b.Navigation("Pictures");
-
                     b.Navigation("Reservations");
 
                     b.Navigation("RoomFacilities");

@@ -1,6 +1,6 @@
 ﻿namespace HotelReservationAPI.Models
 {
-    public class Customer:BaseModel
+    public class Customer : BaseModel
     {
         public string Name { get; set; }
         public string PhoneNumber { get; set; }

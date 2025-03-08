@@ -7,6 +7,8 @@ using HotelReservationAPI.Repositoried;
 using HotelReservationAPI.Validators.Rooms.HotelReservationAPI.Validators.Rooms;
 using System.Text;
 
+
+
 namespace HotelReservationAPI.Services
 {
     public class RoomService
@@ -17,6 +19,7 @@ namespace HotelReservationAPI.Services
         {
             _roomRepo = new GeneralRepository<Room>();
             _validatior = new RoomValidator();
+
         }
         public IEnumerable<GetAllRoomDto> GetAllAvailableRooms()
         {
@@ -53,7 +56,7 @@ namespace HotelReservationAPI.Services
 
             _roomRepo.UpdateInclude(updatedRoom,
                 nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status));
+                nameof(Room.Number), nameof(Room.Status), nameof(Room.Pictuers));
         }
         public void Delete(int Id)
         {

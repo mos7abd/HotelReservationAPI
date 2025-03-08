@@ -4,6 +4,8 @@ using HotelReservationAPI.Configurations;
 using HotelReservationAPI.Helper;
 using System.Reflection;
 
+
+
 namespace HotelReservationAPI
 {
     public class Program
@@ -11,7 +13,6 @@ namespace HotelReservationAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
 
 
             // Add services to the container.
