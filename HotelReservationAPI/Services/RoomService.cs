@@ -43,6 +43,7 @@ namespace HotelReservationAPI.Services
         public void Update(UpdateRoomDto updateRoomDto)
         {
             var updatedRoom = updateRoomDto.Map<Room>();
+
             var validationResult = _validatior.Validate(updatedRoom);
             StringBuilder errorMessage = new StringBuilder();
             if (!validationResult.IsValid)
@@ -56,7 +57,7 @@ namespace HotelReservationAPI.Services
 
             _roomRepo.UpdateInclude(updatedRoom,
                 nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status), nameof(Room.Pictuers));
+                nameof(Room.Number), nameof(Room.Status));
         }
         public void Delete(int Id)
         {

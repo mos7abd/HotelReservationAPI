@@ -11,9 +11,9 @@ namespace HotelReservationAPI.Repositoried
         protected Context _context;
         protected DbSet<T> _dbSet;
 
-        public GeneralRepository(Context context)
+        public GeneralRepository()
         {
-            _context = context;
+            _context = new Context();
             _dbSet = _context.Set<T>();
         }
 
@@ -62,7 +62,7 @@ namespace HotelReservationAPI.Repositoried
         public async void Delete(int id)
         {
             var crs = await GetByIDWithTracking(id);
-            crs.isDeleted = true;
+            crs.Deleted = true;
             _context.SaveChanges();
         }
 
