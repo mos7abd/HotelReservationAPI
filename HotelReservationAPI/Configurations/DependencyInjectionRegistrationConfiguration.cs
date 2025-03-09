@@ -7,7 +7,11 @@ namespace HotelReservationAPI.Configurations
         public static IServiceCollection RegisterServices(this IServiceCollection services)
         {
             services.AddScoped<RoomService>();
+
+
+
             return services;
         }
+
     }
 }

@@ -1,7 +1,9 @@
 
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using HotelReservationAPI.Configurations;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Middlewares;
 using System.Reflection;
 
 
@@ -37,7 +39,7 @@ namespace HotelReservationAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

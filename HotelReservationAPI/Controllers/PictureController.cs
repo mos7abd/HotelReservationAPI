@@ -1,24 +1,21 @@
 ﻿using HotelReservationAPI.Dtos.Picture;
-using HotelReservationAPI.Dtos.Room;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Picture;
 using HotelReservationAPI.ViewModels.ResponseViewModell;
-using HotelReservationAPI.ViewModels.Room;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class PictureController : ControllerBase
     {
         PictureService _pictureService;
         public PictureController()
         {
-            _pictureService=new PictureService();
+            _pictureService = new PictureService();
         }
 
         [HttpGet]
