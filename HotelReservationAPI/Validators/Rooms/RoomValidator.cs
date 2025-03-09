@@ -22,11 +22,6 @@ namespace HotelReservationAPI.Validators.Rooms
                 RuleFor(room => room.Status)
                     .IsInEnum().WithMessage("Invalid room status");
 
-                RuleFor(room => room.RoomFacilities)
-                    .NotNull().WithMessage("Room facilities cannot be null");
-
-                RuleFor(room => room.Pictures)
-                    .NotNull().WithMessage("Pictures cannot be null");
             }
         }
     }

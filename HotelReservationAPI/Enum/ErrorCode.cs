@@ -2,9 +2,16 @@
 {
     public enum ErrorCode
     {
-        None=0,
+        None = 200,                       //ok 
 
-        RoomIDNotFound=100,
+        RoomNotFound = 100,
+        UnKnown = 500,                   // Internal Server Error
+        BadRequest = 400,                   // Bad Request
+        Unauthorized = 401,                 // Unauthorized
+        NotFound = 404,                     // Not Found
+        Conflict = 409,                     // Conflict
+        InternalServerError = 500,
+
 
     }
 }

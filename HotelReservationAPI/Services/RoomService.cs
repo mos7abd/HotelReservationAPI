@@ -1,11 +1,9 @@
-﻿using FluentValidation;
-using HotelReservationAPI.Dtos.Room;
+﻿using HotelReservationAPI.Dtos.Room;
 using HotelReservationAPI.Enum;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Repositoried;
-using HotelReservationAPI.Validators.Rooms.HotelReservationAPI.Validators.Rooms;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 
 
@@ -14,17 +12,18 @@ namespace HotelReservationAPI.Services
     public class RoomService
     {
         GeneralRepository<Room> _roomRepo;
-        private IValidator<Room> _validatior;
         public RoomService()
         {
             _roomRepo = new GeneralRepository<Room>();
-            _validatior = new RoomValidator();
 
         }
-        public IEnumerable<GetAllRoomDto> GetAllAvailableRooms()
+        public IQueryable<GetAllRoomDto> GetAllAvailableRooms()
         {
-            var room = _roomRepo.Get(r => r.Status == RoomStatus.Available);
-            return room.Project<GetAllRoomDto>();
+            var rooms = _roomRepo.Get(r => r.Status == RoomStatus.Available)
+                .Project<GetAllRoomDto>();
+
+
+            return rooms;
         }
         public GetRoomByIdDto GetRoomById(int id)
         {
@@ -33,35 +32,33 @@ namespace HotelReservationAPI.Services
             return room;
 
         }
+        public async Task<bool> IsRoomExistAsync(int id)
+        {
+            var IsRoomExist = await _roomRepo.Get(r => r.ID == id).AnyAsync();
 
-        public void Add(AddRoomDto addRoomDto)
+            return IsRoomExist;
+
+        }
+
+        public int Add(AddRoomDto addRoomDto)
         {
             var newRoom = addRoomDto.Map<Room>();
 
-            _roomRepo.Add(newRoom);
+            int roomId = _roomRepo.Add(newRoom);
+
+            return roomId;
         }
         public void Update(UpdateRoomDto updateRoomDto)
         {
             var updatedRoom = updateRoomDto.Map<Room>();
+            _roomRepo.UpdateInclude(updatedRoom, nameof(Room.Price), nameof(Room.Status));
 
-            var validationResult = _validatior.Validate(updatedRoom);
-            StringBuilder errorMessage = new StringBuilder();
-            if (!validationResult.IsValid)
-            {
-                foreach (var error in validationResult.Errors)
-                {
-                    errorMessage.AppendLine($" ,{error.ErrorMessage}");
-                }
-
-            }
-
-            _roomRepo.UpdateInclude(updatedRoom,
-                nameof(Room.Type), nameof(Room.Price),
-                nameof(Room.Number), nameof(Room.Status));
         }
         public void Delete(int Id)
         {
             _roomRepo.Delete(Id);
         }
+
+
     }
 }

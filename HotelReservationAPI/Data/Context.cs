@@ -12,14 +12,14 @@ namespace HotelReservationAPI.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 
-            optionsBuilder.UseSqlServer(@"Data source =.;initial catalog = HotelReservationDB; Integrated Security=true; TrustServerCertificate=true")
+            optionsBuilder.UseSqlServer(@"Data source =localhost;initial catalog = HotelReservationDB; Integrated Security=true; TrustServerCertificate=true")
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
                 .EnableSensitiveDataLogging();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.Deleted);
+            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.isDeleted);
         }
     }
 }

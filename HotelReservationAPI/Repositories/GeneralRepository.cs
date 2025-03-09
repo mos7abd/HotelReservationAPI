@@ -43,10 +43,11 @@ namespace HotelReservationAPI.Repositoried
                 .FirstOrDefaultAsync();
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
             _dbSet.Add(entity);
             _context.SaveChanges();
+            return entity.ID;
         }
         public void AddRange(IEnumerable<T> entities)
         {
@@ -62,7 +63,7 @@ namespace HotelReservationAPI.Repositoried
         public async void Delete(int id)
         {
             var crs = await GetByIDWithTracking(id);
-            crs.Deleted = true;
+            crs.isDeleted = true;
             _context.SaveChanges();
         }
 
