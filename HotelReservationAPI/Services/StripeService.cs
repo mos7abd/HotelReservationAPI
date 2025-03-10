@@ -34,7 +34,7 @@ namespace HotelReservationAPI.Services
             return service.Url;
         }
 
-        public void CreateProduct(Room room) // ask mentor: should I make IProduct interface and implement it in Room class or should I make a DTO?
+        public bool CreateProduct(Room room) // ask mentor: should I make IProduct interface and implement it in Room class or should I make a DTO?
         {
             var options = new ProductCreateOptions
             {
@@ -42,7 +42,9 @@ namespace HotelReservationAPI.Services
             };
 
             Product product = _productService.Create(options);
-           AddPriceToProduct(product.Id, room.Price);
+            bool priceAdded = AddPriceToProduct(product.Id, room.Price);
+            return product is not null && priceAdded;
+
         }
         public bool AddPriceToProduct(string productId, long price) // ask mentor what is I wanna price decimal instead of long
         {
@@ -73,10 +75,12 @@ namespace HotelReservationAPI.Services
         {
             return _productService.Update(productId, productUpdateOptions);
         }
-        public void DeleteProduct(string productId)
-        {
-            _productService.Delete(productId);
-        }
+
+        //Fix: have to remove all prices first then delete the product
+        //public void DeleteProduct(string productId)
+        //{
+        //    _productService.Delete(productId);
+        //}
     }
 
 
