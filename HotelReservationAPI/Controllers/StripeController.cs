@@ -36,11 +36,11 @@ namespace HotelReservationAPI.Controllers
                 Name = name
             });
         }
-        [HttpDelete]
-        public void DeleteProduct(string productId)
-        {
-             _stripeService.DeleteProduct(productId);
-        }
+        //[HttpDelete]
+        //public void DeleteProduct(string productId)
+        //{
+        //     _stripeService.DeleteProduct(productId);
+        //}
 
 
     }
