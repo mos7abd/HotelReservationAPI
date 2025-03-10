@@ -26,11 +26,11 @@ namespace HotelReservationAPI.Validators.Reservations
                 .GreaterThan(DateTime.Now)
                 .WithMessage("CheckOut Date Must be Greater Than Current Date");
 
-            RuleFor(R => R.CustomerId)
+            RuleFor(R => R.CustomerId).GreaterThan(0)
                 .NotEmpty()
                 .WithMessage("Customer Id is Required");
 
-            RuleFor(R => R.RoomId)
+            RuleFor(R => R.RoomId).GreaterThan(0)
                 .NotEmpty()
                 .WithMessage("Room Id is Required");
         }

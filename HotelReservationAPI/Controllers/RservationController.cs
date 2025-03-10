@@ -56,6 +56,7 @@ namespace HotelReservationAPI.Controllers
         public async Task<ResponseViewModel<bool>> AddAsync(AddReservationViewModel addReservationViewModel)
         {
             var validationResult = _addReservationViewModelValidator.Validate(addReservationViewModel);
+
             if (validationResult.IsValid is false)
             {
                 throw new RequstValidationException(validationResult);

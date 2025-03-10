@@ -1,6 +1,7 @@
 
 using AutoMapper;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Middlewares;
 using HotelReservationAPI.Profiles;
 using HotelReservationAPI.Services;
 
@@ -32,6 +33,8 @@ namespace HotelReservationAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
