@@ -1,6 +1,12 @@
 
 using AutoMapper;
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
+using HotelReservationAPI.Services;
+using Stripe;
+using System.Reflection;
+
+// ask team: about where should we put Stripe product price Id
 using HotelReservationAPI.Middlewares;
 using HotelReservationAPI.Profiles;
 using HotelReservationAPI.Services;
@@ -18,10 +24,25 @@ namespace HotelReservationAPI
 
             // Add services to the container.
 
+            builder.Services.RegisterServices()
+                .AddAutoMapperConfig()
+                .AddFluentValidation(Assembly.GetExecutingAssembly());
+
+            var stripeSettings = builder.Services.Configure<StripeModel>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+
+            builder.Services.AddScoped<ProductService>();
+            builder.Services.AddScoped<StripeService>();
+            builder.Services.AddScoped<PriceService>();
+
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            //builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.CustomSchemaIds(type => type.FullName); // Use full name to avoid conflicts
+            });
 
             var app = builder.Build();
             AutoMaperHelper.Mapper = app.Services.GetService<IMapper>();

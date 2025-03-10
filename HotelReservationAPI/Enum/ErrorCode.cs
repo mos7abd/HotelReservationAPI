@@ -2,6 +2,7 @@
 {
     public enum ErrorCode
     {
+
         None = 200,                       //ok 
 
         RoomNotFound = 100,

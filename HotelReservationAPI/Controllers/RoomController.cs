@@ -1,21 +1,27 @@
-﻿using FluentValidation;
+using FluentValidation;
 using HotelReservationAPI.Dtos.Rooms;
 using HotelReservationAPI.Enum;
 using HotelReservationAPI.Exceptions;
+
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
+using HotelReservationAPI.ResponseModels;
 using HotelReservationAPI.Services;
+
 using HotelReservationAPI.Validators.Rooms;
 using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Rooms;
+
 using Microsoft.AspNetCore.Mvc;
 using static HotelReservationAPI.Helper.PagedListQueryableExtensions;
 
 namespace HotelReservationAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RoomController : ControllerBase
     {
+
         private readonly RoomService _roomService;
         private readonly ReservationService _reservationService;
         private readonly IValidator<AddRoomViewModel> _AddRoomViewModelValidator;
@@ -29,6 +35,7 @@ namespace HotelReservationAPI.Controllers
         }
         [HttpGet("GetAll")]
         public async Task<ResponseViewModel<PagedList<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom(int page, int pageSize)
+
         {
             if (page < 1 || pageSize < 1)
             {
@@ -39,10 +46,12 @@ namespace HotelReservationAPI.Controllers
 
 
             return ResponseViewModel<PagedList<GetAllRoomViewModel>>.Sucess(rooms);
+
         }
         [HttpGet("{id}")]
         public async Task<ResponseViewModel<GetRoomByIdViewModel>> GetRoomById(int id)
         {
+
             if (id < 1)
             {
                 return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.BadRequest, "Id must be greater than 0");
@@ -91,6 +100,7 @@ namespace HotelReservationAPI.Controllers
             var updateRoomDto = updateRoomViewModel.Map<UpdateRoomDto>();
             _roomService.Update(updateRoomDto);
 
+
             return ResponseViewModel<bool>.Sucess(true);
 
             //return new SuccessResponseViewModel<bool>(true);
@@ -116,6 +126,7 @@ namespace HotelReservationAPI.Controllers
 
             _roomService.Delete(id);
             return ResponseViewModel<bool>.Sucess(true);
+
         }
 
 
