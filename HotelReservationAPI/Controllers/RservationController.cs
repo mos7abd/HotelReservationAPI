@@ -124,11 +124,20 @@ namespace HotelReservationAPI.Controllers
                 return ResponseViewModel<bool>
                     .Failure(ErrorCode.BadRequest, "Id must be greater thean 0");
             }
-            bool isReservationExists = await _reservationService.IsExistsAsync(id);
-            if (isReservationExists is false)
+            var reservation = await _reservationService.GetByIdAsync(id);
+            if (reservation is null)
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.ReservationNotFound, "Reservation Not Found");
             }
+            if (reservation.Status == ReservationStatus.Canceled)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.ReservationAlreadyCanceled, "Reservation Already Canceled");
+            }
+            if (reservation.Status == ReservationStatus.Completed)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.ReservationAlreadyCompleted, "Reservation Already Completed");
+            }
+
             bool isCanceled = await _reservationService.CancelAsync(id);
             if (isCanceled is false)
             {

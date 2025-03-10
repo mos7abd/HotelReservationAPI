@@ -16,12 +16,14 @@ namespace HotelReservationAPI.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        RoomService _roomService;
+        private readonly RoomService _roomService;
+        private readonly ReservationService _reservationService;
         private readonly IValidator<AddRoomViewModel> _AddRoomViewModelValidator;
         private readonly IValidator<UpdateRoomViewModel> _UpdateRoomViewModelValidator;
-        public RoomController(RoomService roomService)
+        public RoomController()
         {
-            _roomService = roomService;
+            _roomService = new RoomService();
+            _reservationService = new ReservationService();
             _AddRoomViewModelValidator = new AddRoomViewModelValidator();
             _UpdateRoomViewModelValidator = new UpdateRoomViewModelValidators();
         }
@@ -85,6 +87,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.RoomNotFound, "Room not found");
             }
+
             var updateRoomDto = updateRoomViewModel.Map<UpdateRoomDto>();
             _roomService.Update(updateRoomDto);
 
@@ -104,6 +107,13 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.RoomNotFound, "Room not found");
             }
+            // check if the room is reserved in the current data 
+            var isRoomReserved = await _reservationService.IsRoomReservedAsync(id, DateTime.UtcNow, DateTime.UtcNow);
+            if (isRoomReserved)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.RoomReserved, "Room is reserved");
+            }
+
             _roomService.Delete(id);
             return ResponseViewModel<bool>.Sucess(true);
         }
