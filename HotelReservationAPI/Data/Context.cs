@@ -19,7 +19,11 @@ namespace HotelReservationAPI.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.isDeleted);
+
+            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.IsDeleted);
+            modelBuilder.Entity<Reservation>()
+                .Property(r => r.Duration)
+            .HasColumnName("Duration"); // this is a computed column
         }
     }
 }

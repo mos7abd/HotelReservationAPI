@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using HotelReservationAPI.Dtos.Picture;
-using HotelReservationAPI.Dtos.Room;
+using HotelReservationAPI.Dtos.Pictures;
 using HotelReservationAPI.Models;
-using HotelReservationAPI.ViewModels.Picture;
-using HotelReservationAPI.ViewModels.Room;
+using HotelReservationAPI.ViewModels.Pictures;
 
 namespace HotelReservationAPI.Profiles
 {
-    public class PictureProfile:Profile
+    public class PictureProfile : Profile
     {
         public PictureProfile()
         {
@@ -22,7 +20,7 @@ namespace HotelReservationAPI.Profiles
 
             CreateMap<Picture, GetAllPicturesRoomDto>();
             CreateMap<GetAllPicturesRoomDto, GetAllRoomPicturesViewModel>();
-           
+
             CreateMap<Picture, GetPictureRoomIdDto>();
             CreateMap<GetPictureRoomIdDto, GetRoomPictureByIdViewModel>();
         }

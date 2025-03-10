@@ -1,4 +1,4 @@
-﻿namespace HotelReservationAPI.ViewModels.Picture
+﻿namespace HotelReservationAPI.ViewModels.Pictures
 {
     public class UpdatePictureRoomViewModel
     {

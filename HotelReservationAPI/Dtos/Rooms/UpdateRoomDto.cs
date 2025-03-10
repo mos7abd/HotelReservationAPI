@@ -1,8 +1,8 @@
-﻿using HotelReservationAPI.Enum;
+﻿using HotelReservationAPI.Models;
 
-namespace HotelReservationAPI.Dtos.Room
+namespace HotelReservationAPI.Dtos.Rooms
 {
-    public class UpdateRoomDto
+    public record UpdateRoomDto
     {
         public int ID { get; set; }
         public int Price { get; set; }

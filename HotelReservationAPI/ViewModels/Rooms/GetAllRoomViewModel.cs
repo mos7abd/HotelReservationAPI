@@ -1,12 +1,14 @@
-﻿using HotelReservationAPI.Enum;
+﻿using HotelReservationAPI.Models;
 
-namespace HotelReservationAPI.ViewModels.Room
+namespace HotelReservationAPI.ViewModels.Rooms
 {
-    public class AddRoomViewModel
+    public class GetAllRoomViewModel
     {
+        public int ID { get; set; }
         public RoomType Type { get; set; }
         public int Price { get; set; }
         public int Number { get; set; }
         public RoomStatus Status { get; set; }
+
     }
 }

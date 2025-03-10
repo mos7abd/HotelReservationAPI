@@ -1,6 +1,6 @@
-﻿using HotelReservationAPI.Enum;
+﻿using HotelReservationAPI.Models;
 
-namespace HotelReservationAPI.ViewModels.Room
+namespace HotelReservationAPI.ViewModels.Rooms
 {
     public class GetRoomByIdViewModel
     {
