@@ -4,7 +4,6 @@ using HotelReservationAPI.Enum;
 using HotelReservationAPI.Exceptions;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
-using HotelReservationAPI.Repositoried;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.Validators.Reservations;
 using HotelReservationAPI.ViewModels;
@@ -17,8 +16,7 @@ namespace HotelReservationAPI.Controllers
     [ApiController]
     public class RservationController : ControllerBase
     {
-        private readonly GeneralRepository<Reservation> _reservationRepository;
-        private readonly GeneralRepository<Room> _roomRepository;
+
         private readonly ReservationService _reservationService;
         private readonly RoomService _roomService;
         private readonly IValidator<AddReservationViewModel> _addReservationViewModelValidator;
@@ -26,8 +24,7 @@ namespace HotelReservationAPI.Controllers
 
         public RservationController()
         {
-            _reservationRepository = new GeneralRepository<Reservation>();
-            _roomRepository = new GeneralRepository<Room>();
+
             _reservationService = new ReservationService();
             _roomService = new RoomService();
             _addReservationViewModelValidator = new AddReservationViewModelValidator();

@@ -46,7 +46,8 @@ namespace HotelReservationAPI.Services
         public async Task<bool> IsRoomReservedAsync(int roomId, DateTime checkInDateTime, DateTime checkOutDateTime)
         {
             var isRoomReserved = await _reservationRepository
-                .Get(R => R.RoomId == roomId && R.CheckIn < checkOutDateTime && R.CheckOut > checkInDateTime).AnyAsync();
+                .Get(R => R.RoomId == roomId && R.CheckIn < checkOutDateTime && R.CheckOut > checkInDateTime &&
+                R.Status != ReservationStatus.Canceled).AnyAsync();
             return isRoomReserved;
         }
 
