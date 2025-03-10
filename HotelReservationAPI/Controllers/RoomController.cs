@@ -45,7 +45,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.BadRequest, "Id must be greater than 0");
             }
-            var room = _roomService.GetRoomById(id);
+            var room = await _roomService.GetRoomByIdAsync(id);
             if (room is null)
             {
                 return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.RoomNotFound, "Room not found");
