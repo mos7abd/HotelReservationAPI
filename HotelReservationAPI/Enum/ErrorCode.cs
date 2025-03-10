@@ -16,6 +16,7 @@
 
         RoomNotAvailable,
         RoomAlreadyReserved,
+        RoomReserved,
 
 
         PictureNotAdded,
@@ -23,7 +24,9 @@
 
         ReservationNotFound,
         ReservationNotAdded,
-        ReservationNotCanceled
+        ReservationNotCanceled,
+        ReservationAlreadyCanceled,
+        ReservationAlreadyCompleted
 
     }
 }

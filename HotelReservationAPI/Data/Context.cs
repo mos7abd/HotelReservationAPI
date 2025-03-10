@@ -22,9 +22,6 @@ namespace HotelReservationAPI.Data
 
             modelBuilder.Entity<BaseModel>().HasQueryFilter(e => !e.IsDeleted);
 
-            modelBuilder.Entity<Reservation>()
-                .Property(r => r.Duration)
-            .HasColumnName("Duration"); // this is a computed column
         }
     }
 }
