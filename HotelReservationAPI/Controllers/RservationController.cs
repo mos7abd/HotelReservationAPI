@@ -46,7 +46,7 @@ namespace HotelReservationAPI.Controllers
                     .Failure(ErrorCode.ReservationNotFound, "This Reservation Not Found ");
             }
             var reservationViewModel = reservationDto.Map<GetReservationByIdViewModel>();
-            return ResponseViewModel<GetReservationByIdViewModel>.Sucess(reservationViewModel);
+            return ResponseViewModel<GetReservationByIdViewModel>.Success(reservationViewModel);
         }
 
         [HttpPost]
@@ -85,7 +85,7 @@ namespace HotelReservationAPI.Controllers
                 return ResponseViewModel<bool>.Failure(ErrorCode.ReservationNotAdded, "Reservation Not Added");
             }
 
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
 
 
@@ -112,7 +112,7 @@ namespace HotelReservationAPI.Controllers
             }
             var updateReservationDto = updateReservationViewModel.Map<UpdateReservationDto>();
             _reservationService.Update(updateReservationDto);
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]
         public async Task<ResponseViewModel<bool>> CancelAsync(int id)
@@ -141,7 +141,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.ReservationNotCanceled, "Reservation Not Canceled");
             }
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
 
 

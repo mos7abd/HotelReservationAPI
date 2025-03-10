@@ -9,7 +9,7 @@ namespace HotelReservationAPI.ViewModels
         public string Message { get; set; }
         public ErrorCode ErrorCode { get; set; }
 
-        public static ResponseViewModel<T> Sucess(T data, string message = "")
+        public static ResponseViewModel<T> Success(T data, string message = "")
         {
             return new ResponseViewModel<T>
             {

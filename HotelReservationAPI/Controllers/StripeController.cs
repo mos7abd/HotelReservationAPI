@@ -1,4 +1,5 @@
 ﻿using HotelReservationAPI.Services;
+using HotelReservationAPI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 
@@ -14,32 +15,37 @@ namespace HotelReservationAPI.Controllers
             _stripeService = stripeService;
         }
         [HttpPost]
-        public string Pay(string priceId, int quantity)
+        public ResponseViewModel<string> Pay(string priceId, int quantity)
         {
-            return _stripeService.Pay(priceId,quantity);
+            string url = _stripeService.Pay(priceId,quantity);
+            return ResponseViewModel<string>.Success(url);
         }
         [HttpPost]
-        public bool ChangeProductPrice(string productId, long newPrice)
+        public ResponseViewModel<bool> ChangeProductPrice(string productId, long newPrice)
         {
-            return _stripeService.ChangeProductPrice(productId, newPrice);
+            bool isChanged = _stripeService.ChangeProductPrice(productId, newPrice);
+            return ResponseViewModel<bool>.Success(isChanged);
         }
         [HttpGet]
-        public StripeList<Product> GetAllProducts()
+        public ResponseViewModel<StripeList<Product>> GetAllProducts()
         {
-            return _stripeService.GetAllProducts();
+            StripeList<Product> products = _stripeService.GetAllProducts();
+            return ResponseViewModel<StripeList<Product>>.Success(products);
         }
         [HttpPut]
-        public Product UpdateProductName(string productId, string name)
+        public ResponseViewModel<Product> UpdateProductName(string productId, string name)
         {
-            return _stripeService.UpdateProduct(productId, new ProductUpdateOptions
+            Product product = _stripeService.UpdateProduct(productId, new ProductUpdateOptions
             {
                 Name = name
             });
+            return ResponseViewModel<Product>.Success(product);
         }
         //[HttpDelete]
-        //public void DeleteProduct(string productId)
+        //public ResponseViewModel<bool> DeleteProduct(string productId)
         //{
-        //     _stripeService.DeleteProduct(productId);
+        //     bool isDeleted = _stripeService.DeleteProduct(productId);
+        //     return ResponseViewModel<bool>.Success(isDeleted);
         //}
 
 
