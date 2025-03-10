@@ -1,15 +1,14 @@
 
 using AutoMapper;
+using HotelReservationAPI.Configurations;
 using HotelReservationAPI.Helper;
+// ask team: about where should we put Stripe product price Id
+using HotelReservationAPI.Middlewares;
 using HotelReservationAPI.Models;
+using HotelReservationAPI.Profiles;
 using HotelReservationAPI.Services;
 using Stripe;
 using System.Reflection;
-
-// ask team: about where should we put Stripe product price Id
-using HotelReservationAPI.Middlewares;
-using HotelReservationAPI.Profiles;
-using HotelReservationAPI.Services;
 
 namespace HotelReservationAPI
 {

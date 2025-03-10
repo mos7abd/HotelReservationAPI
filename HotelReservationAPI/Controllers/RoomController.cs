@@ -4,8 +4,6 @@ using HotelReservationAPI.Enum;
 using HotelReservationAPI.Exceptions;
 
 using HotelReservationAPI.Helper;
-using HotelReservationAPI.Models;
-using HotelReservationAPI.ResponseModels;
 using HotelReservationAPI.Services;
 
 using HotelReservationAPI.Validators.Rooms;
