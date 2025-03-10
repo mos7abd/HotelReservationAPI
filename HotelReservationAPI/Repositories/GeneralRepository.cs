@@ -62,7 +62,7 @@ namespace HotelReservationAPI.Repositoried
         public async void Delete(int id)
         {
             var crs = await GetByIDWithTracking(id);
-            crs.Deleted = true;
+            crs.isDeleted = true;
             _context.SaveChanges();
         }
 

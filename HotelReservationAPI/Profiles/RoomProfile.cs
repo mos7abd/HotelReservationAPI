@@ -10,6 +10,7 @@ namespace HotelReservationAPI.Profiles
         public RoomProfile()
         {
             CreateMap<AddRoomViewModel, AddRoomDto>();
+            CreateMap<AddRoomViewModel, Room>(); // test
             CreateMap<AddRoomDto, Room>();
             CreateMap<UpdateRoomViewModel,UpdateRoomDto> ();
             CreateMap<UpdateRoomDto, Room>();

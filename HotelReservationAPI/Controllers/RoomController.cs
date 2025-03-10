@@ -1,23 +1,23 @@
-﻿using AutoMapper.QueryableExtensions;
-using HotelReservationAPI.Dtos.Room;
+﻿using HotelReservationAPI.Dtos.Room;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.ResponseModels;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels.Room;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RoomController : ControllerBase
     {
         RoomService _roomService;
-        public RoomController(RoomService roomService)
+        StripeService _stripeService; // test
+        public RoomController(RoomService roomService, StripeService stripeService) // test
         {
-            _roomService= roomService;
+            _roomService = roomService;
+            _stripeService = stripeService; // test
         }
         [HttpGet("GetAll")]
         public async Task<ResponseViewModel<IQueryable<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom()
@@ -37,8 +37,11 @@ namespace HotelReservationAPI.Controllers
         [HttpPost]
         public ResponseViewModel<bool> Add(AddRoomViewModel addRoomViewModel)
         {
-              var newRoomDto=addRoomViewModel.Map<AddRoomDto>();
+             var newRoomDto=addRoomViewModel.Map<AddRoomDto>();
             _roomService.Add(newRoomDto);
+            // after add room create product in stripe immediately 
+            _stripeService.CreateProduct(addRoomViewModel.Map<Room>()); // test
+
             return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]

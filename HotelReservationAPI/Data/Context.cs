@@ -19,7 +19,7 @@ namespace HotelReservationAPI.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.Deleted);
+            modelBuilder.Entity<Room>().HasQueryFilter(r => !r.isDeleted);
         }
     }
 }
