@@ -1,9 +1,8 @@
-﻿namespace HotelReservationAPI.Enum
+﻿namespace HotelReservationAPI.Models
 {
     public enum RoomStatus
     {
         Available,
-        Booked,
         UnderMaintenance
     }
 }

@@ -13,5 +13,17 @@
         InternalServerError = 500,
 
 
+
+        RoomNotAvailable,
+        RoomAlreadyReserved,
+
+
+        PictureNotAdded,
+
+
+        ReservationNotFound,
+        ReservationNotAdded,
+        ReservationNotCanceled
+
     }
 }

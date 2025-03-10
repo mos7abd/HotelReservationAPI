@@ -1,5 +1,4 @@
-﻿using HotelReservationAPI.Dtos.Room;
-using HotelReservationAPI.Enum;
+﻿using HotelReservationAPI.Dtos.Rooms;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Repositoried;
@@ -25,10 +24,10 @@ namespace HotelReservationAPI.Services
 
             return rooms;
         }
-        public GetRoomByIdDto GetRoomById(int id)
+        public async Task<GetRoomByIdDto?> GetRoomByIdAsync(int id)
         {
-            var room = _roomRepo.Get(r => r.ID == id)
-                .Project<GetRoomByIdDto>().FirstOrDefault();
+            var room = await _roomRepo.Get(r => r.ID == id)
+                .Project<GetRoomByIdDto>().FirstOrDefaultAsync();
             return room;
 
         }
@@ -40,11 +39,11 @@ namespace HotelReservationAPI.Services
 
         }
 
-        public int Add(AddRoomDto addRoomDto)
+        public async Task<int> AddAsync(AddRoomDto addRoomDto)
         {
             var newRoom = addRoomDto.Map<Room>();
 
-            int roomId = _roomRepo.Add(newRoom);
+            int roomId = await _roomRepo.AddAsync(newRoom);
 
             return roomId;
         }

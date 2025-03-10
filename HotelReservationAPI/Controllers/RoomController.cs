@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using HotelReservationAPI.Dtos.Room;
+using HotelReservationAPI.Dtos.Rooms;
 using HotelReservationAPI.Enum;
 using HotelReservationAPI.Exceptions;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.Validators.Rooms;
 using HotelReservationAPI.ViewModels;
-using HotelReservationAPI.ViewModels.Room;
+using HotelReservationAPI.ViewModels.Rooms;
 using Microsoft.AspNetCore.Mvc;
 using static HotelReservationAPI.Helper.PagedListQueryableExtensions;
 
@@ -55,7 +55,7 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpPost]
-        public ResponseViewModel<bool> Add(AddRoomViewModel addRoomViewModel)
+        public async Task<ResponseViewModel<bool>> Add(AddRoomViewModel addRoomViewModel)
         {
             var validationResult = _AddRoomViewModelValidator.Validate(addRoomViewModel);
             if (validationResult.IsValid is false)
@@ -63,7 +63,7 @@ namespace HotelReservationAPI.Controllers
                 throw new RequstValidationException(validationResult);
             }
             var newRoomDto = addRoomViewModel.Map<AddRoomDto>();
-            var newRoomId = _roomService.Add(newRoomDto);
+            var newRoomId = await _roomService.AddAsync(newRoomDto);
 
             if (newRoomId == 0)
             {

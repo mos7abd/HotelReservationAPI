@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using HotelReservationAPI.ViewModels.Room;
+using HotelReservationAPI.ViewModels.Rooms;
 
 namespace HotelReservationAPI.Validators.Rooms
 {

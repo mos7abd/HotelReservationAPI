@@ -1,6 +1,6 @@
-﻿namespace HotelReservationAPI.Dtos.Picture
+﻿namespace HotelReservationAPI.Dtos.Pictures
 {
-    public class AddPictureToRoomDto
+    public record AddPictureToRoomDto
     {
         public int RoomId { get; set; }
         public string Name { get; set; }
