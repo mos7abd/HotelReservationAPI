@@ -1,6 +1,4 @@
-﻿using HotelReservationAPI.Dtos.Picture;
-using HotelReservationAPI.Dtos.Room;
-using HotelReservationAPI.Enum;
+﻿using HotelReservationAPI.Dtos.Pictures;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Repositoried;
@@ -28,14 +26,15 @@ namespace HotelReservationAPI.Services
             return picture;
         }
 
-        public void Add(AddPictureToRoomDto addPictureToRoomDto) 
+        public async Task<int> AddAsync(AddPictureToRoomDto addPictureToRoomDto)
         {
             var newPictureToDto = addPictureToRoomDto.Map<Picture>();
-            _roomPicture.Add(newPictureToDto);
+            int pictureId = await _roomPicture.AddAsync(newPictureToDto);
+            return pictureId;
         }
         public void Update(UpdatePictureRoomDto updatePictureRoomDto)
         {
-            var updatePicture=updatePictureRoomDto.Map<Picture>();
+            var updatePicture = updatePictureRoomDto.Map<Picture>();
             _roomPicture.UpdateInclude(updatePicture, nameof(Picture.Name),
                 nameof(Picture.Url));
         }

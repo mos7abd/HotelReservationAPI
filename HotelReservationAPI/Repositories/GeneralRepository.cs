@@ -27,7 +27,7 @@ namespace HotelReservationAPI.Repositoried
             return GetAll().Where(predicate);
         }
 
-        public async Task<T> GetByID(int id)
+        public async Task<T> GetByIDAsync(int id)
         {
             return await _dbSet
                 .Where(c => c.ID == id)
@@ -43,10 +43,11 @@ namespace HotelReservationAPI.Repositoried
                 .FirstOrDefaultAsync();
         }
 
-        public void Add(T entity)
+        public async Task<int> AddAsync(T entity)
         {
-            _dbSet.Add(entity);
+            await _dbSet.AddAsync(entity);
             _context.SaveChanges();
+            return entity.ID;
         }
         public void AddRange(IEnumerable<T> entities)
         {
@@ -62,7 +63,8 @@ namespace HotelReservationAPI.Repositoried
         public async void Delete(int id)
         {
             var crs = await GetByIDWithTracking(id);
-            crs.isDeleted = true;
+
+            crs.IsDeleted = true;
             _context.SaveChanges();
         }
 

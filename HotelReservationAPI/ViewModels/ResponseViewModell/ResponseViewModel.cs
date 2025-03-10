@@ -15,11 +15,11 @@ namespace HotelReservationAPI.ViewModels
             {
                 Data = data,
                 IsSuccess = true,
-                Message= "",
-                ErrorCode=ErrorCode.None,
+                Message = message,
+                ErrorCode = ErrorCode.None,
             };
         }
-        public static ResponseViewModel<T> Failure(ErrorCode errorCode, string message = "")
+        public static ResponseViewModel<T> Failure(ErrorCode errorCode, string message)
         {
             return new ResponseViewModel<T>
             {

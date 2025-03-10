@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using HotelReservationAPI.Dtos.Room;
+using HotelReservationAPI.Dtos.Rooms;
 using HotelReservationAPI.Models;
-using HotelReservationAPI.ViewModels.Room;
+using HotelReservationAPI.ViewModels.Rooms;
 
 namespace HotelReservationAPI.Profiles
 {
-    public class RoomProfile:Profile
+    public class RoomProfile : Profile
     {
         public RoomProfile()
         {
             CreateMap<AddRoomViewModel, AddRoomDto>();
             CreateMap<AddRoomViewModel, Room>(); // test
             CreateMap<AddRoomDto, Room>();
-            CreateMap<UpdateRoomViewModel,UpdateRoomDto> ();
+            CreateMap<UpdateRoomViewModel, UpdateRoomDto>();
             CreateMap<UpdateRoomDto, Room>();
 
             CreateMap<Room, GetAllRoomDto>();

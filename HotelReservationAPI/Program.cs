@@ -1,6 +1,5 @@
 
 using AutoMapper;
-using HotelReservationAPI.Configurations;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.Services;
@@ -8,6 +7,9 @@ using Stripe;
 using System.Reflection;
 
 // ask team: about where should we put Stripe product price Id
+using HotelReservationAPI.Middlewares;
+using HotelReservationAPI.Profiles;
+using HotelReservationAPI.Services;
 
 namespace HotelReservationAPI
 {
@@ -16,6 +18,8 @@ namespace HotelReservationAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<RoomService>();
+            builder.Services.AddAutoMapper(typeof(RoomProfile).Assembly);
 
 
             // Add services to the container.
@@ -41,7 +45,6 @@ namespace HotelReservationAPI
             });
 
             var app = builder.Build();
-
             AutoMaperHelper.Mapper = app.Services.GetService<IMapper>();
 
 
@@ -51,6 +54,8 @@ namespace HotelReservationAPI
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 

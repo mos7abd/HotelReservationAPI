@@ -1,6 +1,4 @@
-﻿    using HotelReservationAPI.Enum;
-
-namespace HotelReservationAPI.Models
+﻿namespace HotelReservationAPI.Models
 {
     public class Room : BaseModel
     {

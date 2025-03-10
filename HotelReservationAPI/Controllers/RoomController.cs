@@ -1,10 +1,19 @@
-﻿using HotelReservationAPI.Dtos.Room;
+using FluentValidation;
+using HotelReservationAPI.Dtos.Rooms;
+using HotelReservationAPI.Enum;
+using HotelReservationAPI.Exceptions;
+
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Models;
 using HotelReservationAPI.ResponseModels;
 using HotelReservationAPI.Services;
-using HotelReservationAPI.ViewModels.Room;
+
+using HotelReservationAPI.Validators.Rooms;
+using HotelReservationAPI.ViewModels;
+using HotelReservationAPI.ViewModels.Rooms;
+
 using Microsoft.AspNetCore.Mvc;
+using static HotelReservationAPI.Helper.PagedListQueryableExtensions;
 
 namespace HotelReservationAPI.Controllers
 {
@@ -12,50 +21,117 @@ namespace HotelReservationAPI.Controllers
     [ApiController]
     public class RoomController : ControllerBase
     {
-        RoomService _roomService;
-        StripeService _stripeService; // test
-        public RoomController(RoomService roomService, StripeService stripeService) // test
+
+        private readonly RoomService _roomService;
+        private readonly ReservationService _reservationService;
+        private readonly IValidator<AddRoomViewModel> _AddRoomViewModelValidator;
+        private readonly IValidator<UpdateRoomViewModel> _UpdateRoomViewModelValidator;
+        public RoomController()
         {
-            _roomService = roomService;
-            _stripeService = stripeService; // test
+            _roomService = new RoomService();
+            _reservationService = new ReservationService();
+            _AddRoomViewModelValidator = new AddRoomViewModelValidator();
+            _UpdateRoomViewModelValidator = new UpdateRoomViewModelValidators();
         }
         [HttpGet("GetAll")]
-        public async Task<ResponseViewModel<IQueryable<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom()
-        {
-            var rooms = _roomService.GetAllAvailableRooms()
-                .AsQueryable().Project<GetAllRoomViewModel>();
+        public async Task<ResponseViewModel<PagedList<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom(int page, int pageSize)
 
-            return ResponseViewModel<IQueryable<GetAllRoomViewModel>>.Success(rooms);
+        {
+            if (page < 1 || pageSize < 1)
+            {
+                return ResponseViewModel<PagedList<GetAllRoomViewModel>>.Failure(ErrorCode.BadRequest, "Page and PageSize must be greater than 0");
+            }
+            var rooms = await _roomService.GetAllAvailableRooms()
+                .Project<GetAllRoomViewModel>().ToPagedListAsync(page, pageSize);
+
+
+            return ResponseViewModel<PagedList<GetAllRoomViewModel>>.Sucess(rooms);
+
         }
         [HttpGet("{id}")]
         public async Task<ResponseViewModel<GetRoomByIdViewModel>> GetRoomById(int id)
         {
-            var room = _roomService.GetRoomById(id).Map<GetRoomByIdViewModel>();
 
-            return ResponseViewModel<GetRoomByIdViewModel>.Success(room);
+            if (id < 1)
+            {
+                return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.BadRequest, "Id must be greater than 0");
+            }
+            var room = await _roomService.GetRoomByIdAsync(id);
+            if (room is null)
+            {
+                return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.RoomNotFound, "Room not found");
+            }
+            return ResponseViewModel<GetRoomByIdViewModel>.Sucess(room.Map<GetRoomByIdViewModel>());
+
         }
-        [HttpPost]
-        public ResponseViewModel<bool> Add(AddRoomViewModel addRoomViewModel)
-        {
-             var newRoomDto=addRoomViewModel.Map<AddRoomDto>();
-            _roomService.Add(newRoomDto);
-            // after add room create product in stripe immediately 
-            _stripeService.CreateProduct(addRoomViewModel.Map<Room>()); // test
 
-            return ResponseViewModel<bool>.Success(true);
+        [HttpPost]
+        public async Task<ResponseViewModel<bool>> Add(AddRoomViewModel addRoomViewModel)
+        {
+            var validationResult = _AddRoomViewModelValidator.Validate(addRoomViewModel);
+            if (validationResult.IsValid is false)
+            {
+                throw new RequstValidationException(validationResult);
+            }
+            var newRoomDto = addRoomViewModel.Map<AddRoomDto>();
+            var newRoomId = await _roomService.AddAsync(newRoomDto);
+
+            if (newRoomId == 0)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.InternalServerError, "The room not added");
+            }
+            return ResponseViewModel<bool>.Sucess(true);
         }
         [HttpPut]
-        public ResponseViewModel<bool> Update(UpdateRoomViewModel updateRoomViewModel)
+        public async Task<ResponseViewModel<bool>> Update(UpdateRoomViewModel updateRoomViewModel)
         {
-           var updateRoomDto= updateRoomViewModel.Map<UpdateRoomDto>();
+            var validationResult = _UpdateRoomViewModelValidator.Validate(updateRoomViewModel);
+
+            if (validationResult.IsValid is false)
+            {
+                throw new RequstValidationException(validationResult);
+            }
+            var IsRoomExist = await _roomService.IsRoomExistAsync(updateRoomViewModel.ID);
+            if (!IsRoomExist)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.RoomNotFound, "Room not found");
+            }
+
+            var updateRoomDto = updateRoomViewModel.Map<UpdateRoomDto>();
             _roomService.Update(updateRoomDto);
-            return ResponseViewModel<bool>.Success(true);
+
+
+            return ResponseViewModel<bool>.Sucess(true);
+
+            //return new SuccessResponseViewModel<bool>(true);
         }
         [HttpDelete]
         public async Task<ResponseViewModel<bool>> Delete(int id)
         {
+            if (id < 1)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.BadRequest, "Id must be greater than 0");
+            }
+            var IsRoomExist = await _roomService.IsRoomExistAsync(id);
+            if (!IsRoomExist)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.RoomNotFound, "Room not found");
+            }
+            // check if the room is reserved in the current data 
+            var isRoomReserved = await _reservationService.IsRoomReservedAsync(id, DateTime.UtcNow, DateTime.UtcNow);
+            if (isRoomReserved)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.RoomReserved, "Room is reserved");
+            }
+
             _roomService.Delete(id);
-            return ResponseViewModel<bool>.Success(true);
+            return ResponseViewModel<bool>.Sucess(true);
+
         }
+
+
+
     }
+
+
 }

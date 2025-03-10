@@ -1,12 +1,9 @@
-﻿using HotelReservationAPI.Dtos.Picture;
-using HotelReservationAPI.Dtos.Room;
+﻿using HotelReservationAPI.Dtos.Pictures;
+using HotelReservationAPI.Enum;
 using HotelReservationAPI.Helper;
 using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels;
-using HotelReservationAPI.ViewModels.Picture;
-using HotelReservationAPI.ViewModels.ResponseViewModell;
-using HotelReservationAPI.ViewModels.Room;
-using Microsoft.AspNetCore.Http;
+using HotelReservationAPI.ViewModels.Pictures;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
@@ -18,7 +15,7 @@ namespace HotelReservationAPI.Controllers
         PictureService _pictureService;
         public PictureController()
         {
-            _pictureService=new PictureService();
+            _pictureService = new PictureService();
         }
 
         [HttpGet]
@@ -27,21 +24,25 @@ namespace HotelReservationAPI.Controllers
             var roomPicture = _pictureService.GetAllRoomPictures(roomId)
                 .Map<GetAllRoomPicturesViewModel>();
 
-            return SuccessResponseViewModel<GetAllRoomPicturesViewModel>.Sucess(roomPicture);
+            return ResponseViewModel<GetAllRoomPicturesViewModel>.Sucess(roomPicture);
         }
         [HttpGet]
         public async Task<ResponseViewModel<GetRoomPictureByIdViewModel>> GetPictureById(int id)
         {
             var picture = _pictureService.GetPictureById(id).Map<GetRoomPictureByIdViewModel>();
-            return SuccessResponseViewModel<GetRoomPictureByIdViewModel>.Sucess(picture);
+            return ResponseViewModel<GetRoomPictureByIdViewModel>.Sucess(picture);
         }
 
         [HttpPost]
         public async Task<ResponseViewModel<bool>> Add(AddPictureToRoomViewModel addPictureToRoomViewModel)
         {
             var newpictureDto = addPictureToRoomViewModel.Map<AddPictureToRoomDto>();
-            _pictureService.Add(newpictureDto);
-            return SuccessResponseViewModel<bool>.Sucess(true);
+            int pictureId = await _pictureService.AddAsync(newpictureDto);
+            if (pictureId == 0)
+            {
+                return ResponseViewModel<bool>.Failure(ErrorCode.PictureNotAdded, "Picture Not Added");
+            }
+            return ResponseViewModel<bool>.Sucess(true);
         }
 
         [HttpPut]
@@ -49,14 +50,14 @@ namespace HotelReservationAPI.Controllers
         {
             var updatePictureDto = updatePictureRoomViewModel.Map<UpdatePictureRoomDto>();
             _pictureService.Update(updatePictureDto);
-            return SuccessResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Sucess(true);
         }
 
         [HttpDelete]
         public async Task<ResponseViewModel<bool>> Delete(int id)
         {
             _pictureService.Delete(id);
-            return SuccessResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Sucess(true);
         }
     }
 }
