@@ -43,7 +43,7 @@ namespace HotelReservationAPI.Controllers
                 .Project<GetAllRoomViewModel>().ToPagedListAsync(page, pageSize);
 
 
-            return ResponseViewModel<PagedList<GetAllRoomViewModel>>.Sucess(rooms);
+            return ResponseViewModel<PagedList<GetAllRoomViewModel>>.Success(rooms);
 
         }
         [HttpGet("{id}")]
@@ -59,7 +59,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<GetRoomByIdViewModel>.Failure(ErrorCode.RoomNotFound, "Room not found");
             }
-            return ResponseViewModel<GetRoomByIdViewModel>.Sucess(room.Map<GetRoomByIdViewModel>());
+            return ResponseViewModel<GetRoomByIdViewModel>.Success(room.Map<GetRoomByIdViewModel>());
 
         }
 
@@ -78,7 +78,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.InternalServerError, "The room not added");
             }
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]
         public async Task<ResponseViewModel<bool>> Update(UpdateRoomViewModel updateRoomViewModel)
@@ -99,7 +99,7 @@ namespace HotelReservationAPI.Controllers
             _roomService.Update(updateRoomDto);
 
 
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
 
             //return new SuccessResponseViewModel<bool>(true);
         }
@@ -123,7 +123,7 @@ namespace HotelReservationAPI.Controllers
             }
 
             _roomService.Delete(id);
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
 
         }
 

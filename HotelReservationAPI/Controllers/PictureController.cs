@@ -24,13 +24,13 @@ namespace HotelReservationAPI.Controllers
             var roomPicture = _pictureService.GetAllRoomPictures(roomId)
                 .Map<GetAllRoomPicturesViewModel>();
 
-            return ResponseViewModel<GetAllRoomPicturesViewModel>.Sucess(roomPicture);
+            return ResponseViewModel<GetAllRoomPicturesViewModel>.Success(roomPicture);
         }
         [HttpGet]
         public async Task<ResponseViewModel<GetRoomPictureByIdViewModel>> GetPictureById(int id)
         {
             var picture = _pictureService.GetPictureById(id).Map<GetRoomPictureByIdViewModel>();
-            return ResponseViewModel<GetRoomPictureByIdViewModel>.Sucess(picture);
+            return ResponseViewModel<GetRoomPictureByIdViewModel>.Success(picture);
         }
 
         [HttpPost]
@@ -42,7 +42,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.PictureNotAdded, "Picture Not Added");
             }
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
 
         [HttpPut]
@@ -50,14 +50,14 @@ namespace HotelReservationAPI.Controllers
         {
             var updatePictureDto = updatePictureRoomViewModel.Map<UpdatePictureRoomDto>();
             _pictureService.Update(updatePictureDto);
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
 
         [HttpDelete]
         public async Task<ResponseViewModel<bool>> Delete(int id)
         {
             _pictureService.Delete(id);
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
     }
 }
