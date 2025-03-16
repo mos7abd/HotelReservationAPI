@@ -25,19 +25,22 @@ namespace HotelReservationAPI
 
             builder.Services.RegisterServices()
                 .AddAutoMapperConfig()
-                .AddFluentValidation(Assembly.GetExecutingAssembly());
+                .AddAuthenticationConfigration()
+                .AddFluentValidation(Assembly.GetExecutingAssembly())
+                .AddAuthorization();
+
 
             var stripeSettings = builder.Services.Configure<StripeModel>(builder.Configuration.GetSection("Stripe"));
             StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
-            builder.Services.AddScoped<ProductService>();
-            builder.Services.AddScoped<StripeService>();
-            builder.Services.AddScoped<PriceService>();
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             //builder.Services.AddSwaggerGen();
+
+
             builder.Services.AddSwaggerGen(options =>
             {
                 options.CustomSchemaIds(type => type.FullName); // Use full name to avoid conflicts
@@ -47,6 +50,16 @@ namespace HotelReservationAPI
             AutoMaperHelper.Mapper = app.Services.GetService<IMapper>();
 
 
+
+            app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+            app.UseMiddleware<TransactionMiddleware>();
+            app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
+
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -54,12 +67,8 @@ namespace HotelReservationAPI
                 app.UseSwaggerUI();
             }
 
-            app.UseMiddleware<ValidationExceptionHandlingMiddleware>();
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
 
             app.MapControllers();
 

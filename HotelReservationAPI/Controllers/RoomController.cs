@@ -9,7 +9,7 @@ using HotelReservationAPI.Services;
 using HotelReservationAPI.Validators.Rooms;
 using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Rooms;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static HotelReservationAPI.Helper.PagedListQueryableExtensions;
 
@@ -17,6 +17,7 @@ namespace HotelReservationAPI.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class RoomController : ControllerBase
     {
 

@@ -9,6 +9,10 @@ namespace HotelReservationAPI.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Facility> Facilities { get; set; }
         public DbSet<Picture> Pictures { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

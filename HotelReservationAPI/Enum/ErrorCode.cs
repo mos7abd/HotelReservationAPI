@@ -27,7 +27,13 @@
         ReservationNotAdded,
         ReservationNotCanceled,
         ReservationAlreadyCanceled,
-        ReservationAlreadyCompleted
+        ReservationAlreadyCompleted,
 
+
+
+
+        UserNotAdded,
+        UserEmailExist,
+        CustomerNotAdded
     }
 }

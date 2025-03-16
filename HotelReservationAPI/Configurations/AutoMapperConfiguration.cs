@@ -8,6 +8,8 @@ namespace HotelReservationAPI.Configurations
         {
             services.AddAutoMapper(typeof(RoomProfile).Assembly);
             services.AddAutoMapper(typeof(ReservationProfile).Assembly);
+            services.AddAutoMapper(typeof(UserProfile).Assembly);
+            services.AddAutoMapper(typeof(CustomerProfile).Assembly);
 
             return services;
         }
