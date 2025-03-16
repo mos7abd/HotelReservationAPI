@@ -17,16 +17,19 @@ namespace HotelReservationAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserService _userService;
-        private readonly CustomerService _customerService;
+        UserService _userService;
+        CustomerService _customerService;
 
-        private readonly IValidator<AddUserViewModel> _addUserViewModelValidator;
+        IValidator<AddUserViewModel> _addUserViewModelValidator;
+        IValidator<LoginViewModel> _LoginViewModelValidator;
 
-        public UserController(CustomerService customerService)
+        public UserController()
         {
             _userService = new UserService();
             _customerService = new CustomerService();
+
             _addUserViewModelValidator = new AddUserViewModelValidator();
+            _LoginViewModelValidator = new LoginViewModelValidator();
         }
 
         [HttpPost("register")]
@@ -64,6 +67,27 @@ namespace HotelReservationAPI.Controllers
                 return ResponseViewModel<bool>.Failure(ErrorCode.CustomerNotAdded, "Customer not added");
             }
             return ResponseViewModel<bool>.Sucess(true);
+        }
+
+        [HttpPost("login")]
+        public async Task<ResponseViewModel<string>> Login([FromBody] LoginViewModel loginViewModel)
+        {
+            var validationResult = _LoginViewModelValidator.Validate(loginViewModel);
+            if (validationResult.IsValid is false)
+            {
+                throw new RequstValidationException(validationResult);
+            }
+
+            var user = await _userService.GetUserByEmailAsync(loginViewModel.Email);
+
+            if (user == null || user.Password != loginViewModel.Password)
+            {
+                return ResponseViewModel<string>.Failure(ErrorCode.Unauthorized, "Invalid email or password");
+            }
+
+            var token = TokenGeneratorHelper.GenerateToken(user.Email, $"{user.FristName} {user.LastName}", user.Role.ToString());
+
+            return ResponseViewModel<string>.Sucess(token);
         }
 
 

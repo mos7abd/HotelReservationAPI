@@ -8,14 +8,14 @@ namespace HotelReservationAPI.Helper
 {
     public class TokenGeneratorHelper
     {
-        public static string GenerateToken(string userId, string name, string role)
+        public static string GenerateToken(string Email, string name, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim("UserId", userId),
+                    new Claim(ClaimTypes.Email, Email),
                     new Claim(ClaimTypes.Role, role),
                     new Claim(ClaimTypes.Name, name)
                 }),

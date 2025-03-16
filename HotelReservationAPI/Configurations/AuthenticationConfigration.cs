@@ -7,10 +7,13 @@ namespace HotelReservationAPI.Configurations
 {
     public static class AuthenticationConfigration
     {
-        public static IServiceCollection AddAuthenticationConfigration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAuthenticationConfigration(this IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -25,6 +28,8 @@ namespace HotelReservationAPI.Configurations
 
                     };
                 });
+
+
             return services;
         }
 
