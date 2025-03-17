@@ -60,17 +60,17 @@ namespace HotelReservationAPI.Controllers
             
         
         [HttpGet]
-        public InvoiceDTO GenerateInvoices(string CustomerEmail,string priceId, int quantity)
+        public ResponseViewModel<InvoiceDTO> GenerateInvoices(string CustomerEmail,string priceId, int quantity)
         {
             InvoiceDTO invoice =  _stripeService.GenerateInvoices(CustomerEmail,priceId, quantity);
-            return invoice;
+            return ResponseViewModel<InvoiceDTO>.Success(invoice);
         }
         [HttpGet]
        
         [HttpGet]
-        public string sendNotification(string message)
+        public ResponseViewModel<string> sendNotification(string message)
         {
-            return _emailService.sendNotification(message);
+            return ResponseViewModel<string>.Success(_emailService.sendNotification(message));
         }
         [HttpPost]
         public async Task<IActionResult> WebHook()
