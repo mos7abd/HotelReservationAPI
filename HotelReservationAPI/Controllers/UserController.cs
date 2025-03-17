@@ -66,7 +66,7 @@ namespace HotelReservationAPI.Controllers
             {
                 return ResponseViewModel<bool>.Failure(ErrorCode.CustomerNotAdded, "Customer not added");
             }
-            return ResponseViewModel<bool>.Sucess(true);
+            return ResponseViewModel<bool>.Success(true);
         }
 
         [HttpPost("login")]
@@ -87,7 +87,7 @@ namespace HotelReservationAPI.Controllers
 
             var token = TokenGeneratorHelper.GenerateToken(user.Email, $"{user.FristName} {user.LastName}", user.Role.ToString());
 
-            return ResponseViewModel<string>.Sucess(token);
+            return ResponseViewModel<string>.Success(token);
         }
 
 
