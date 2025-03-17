@@ -1,23 +1,33 @@
-﻿using HotelReservationAPI.Services;
+﻿using HotelReservationAPI.Dtos.Invoice;
+using HotelReservationAPI.Models;
+using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels;
+using MailKit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using Microsoft.Extensions.Options;
 using Stripe;
+using System.Reflection.Metadata.Ecma335;
 
 namespace HotelReservationAPI.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class StripeController : ControllerBase
+    public partial class StripeController : ControllerBase
     {
         public readonly StripeService _stripeService;
-        public StripeController(StripeService stripeService)
+        public readonly StripeModel _stripeModel;
+        public readonly EmailService _emailService;
+        public StripeController(StripeService stripeService, IOptions<StripeModel> options, EmailService emailService)
         {
             _stripeService = stripeService;
+            _stripeModel = options.Value;
+            _emailService = emailService;
         }
         [HttpPost]
-        public ResponseViewModel<string> Pay(string priceId, int quantity)
+        public ResponseViewModel<string> Pay(string customerEmail, string priceId, int quantity)
         {
-            string url = _stripeService.Pay(priceId,quantity);
+            string url = _stripeService.Pay(customerEmail, priceId,quantity);
             return ResponseViewModel<string>.Success(url);
         }
         [HttpPost]
@@ -41,13 +51,60 @@ namespace HotelReservationAPI.Controllers
             });
             return ResponseViewModel<Product>.Success(product);
         }
-        //[HttpDelete]
-        //public ResponseViewModel<bool> DeleteProduct(string productId)
-        //{
-        //     bool isDeleted = _stripeService.DeleteProduct(productId);
-        //     return ResponseViewModel<bool>.Success(isDeleted);
-        //}
+        [HttpDelete]
+        public ResponseViewModel<bool> DeleteProduct(string productId)
+        {
+            bool isDeleted = _stripeService.DeleteProduct(productId);
+            return ResponseViewModel<bool>.Success(isDeleted);
+        }
+            
+        
+        [HttpGet]
+        public InvoiceDTO GenerateInvoices(string CustomerEmail,string priceId, int quantity)
+        {
+            InvoiceDTO invoice =  _stripeService.GenerateInvoices(CustomerEmail,priceId, quantity);
+            return invoice;
+        }
+        [HttpGet]
+       
+        [HttpGet]
+        public string sendNotification(string message)
+        {
+            return _emailService.sendNotification(message);
+        }
+        [HttpPost]
+        public async Task<IActionResult> WebHook()
+        {
 
+            var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+            try
+            {
+                var stripeEvent = EventUtility.ParseEvent(json);
+
+                // Handle the event
+                // If on SDK version < 46, use class Events instead of EventTypes
+                if (stripeEvent.Type == EventTypes.PaymentIntentSucceeded)
+                {
+                    var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+                    // Then define and call a method to handle the successful payment intent.
+                    // handlePaymentIntentSucceeded(paymentIntent);
+                    sendNotification("Payment Success");
+                    
+                }
+                // ... handle other event types
+                else
+                {
+                    // Unexpected event type
+                    Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
+                }
+                return Ok();
+            }
+            catch (StripeException e)
+            {
+                return BadRequest();
+            }
+        }
 
     }
 }
