@@ -8,6 +8,7 @@ using HotelReservationAPI.Services;
 using HotelReservationAPI.Validators.Reservations;
 using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Reservations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
@@ -32,6 +33,8 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<GetReservationByIdViewModel>> GetByIdAsync(int id)
         {
             if (id <= 0)
@@ -50,6 +53,8 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<bool>> AddAsync(AddReservationViewModel addReservationViewModel)
         {
             var validationResult = _addReservationViewModelValidator.Validate(addReservationViewModel);
@@ -90,6 +95,8 @@ namespace HotelReservationAPI.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<bool>> Update(UpdateReservationViewModel updateReservationViewModel)
         {
             var validationResult = _updateReservationViewModelValidator.Validate(updateReservationViewModel);
@@ -115,6 +122,8 @@ namespace HotelReservationAPI.Controllers
             return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<bool>> CancelAsync(int id)
         {
             if (id <= 0)

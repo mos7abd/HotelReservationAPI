@@ -9,6 +9,7 @@ using HotelReservationAPI.Services;
 using HotelReservationAPI.Validators.Users;
 using HotelReservationAPI.ViewModels;
 using HotelReservationAPI.ViewModels.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelReservationAPI.Controllers
@@ -22,7 +23,7 @@ namespace HotelReservationAPI.Controllers
 
         IValidator<AddUserViewModel> _addUserViewModelValidator;
         IValidator<LoginViewModel> _LoginViewModelValidator;
-
+        
         public UserController()
         {
             _userService = new UserService();
@@ -33,6 +34,7 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpPost("register")]
+        [Authorize(Roles = "Customer")]
         public async Task<ResponseViewModel<bool>> Register([FromBody] AddUserViewModel addUserViewModel)
         {
             var validationResult = _addUserViewModelValidator.Validate(addUserViewModel);
@@ -70,6 +72,8 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpPost("login")]
+        [Authorize(Roles = "Customer, HotelStaff")]
+
         public async Task<ResponseViewModel<string>> Login([FromBody] LoginViewModel loginViewModel)
         {
             var validationResult = _LoginViewModelValidator.Validate(loginViewModel);

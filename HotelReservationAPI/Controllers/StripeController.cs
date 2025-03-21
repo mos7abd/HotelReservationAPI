@@ -1,5 +1,6 @@
 ﻿using HotelReservationAPI.Services;
 using HotelReservationAPI.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
 
@@ -15,6 +16,8 @@ namespace HotelReservationAPI.Controllers
             _stripeService = stripeService;
         }
         [HttpPost]
+        [Authorize(Roles = "Customer")]
+
         public ResponseViewModel<string> Pay(string priceId, int quantity)
         {
             string url = _stripeService.Pay(priceId,quantity);

@@ -4,6 +4,7 @@ using HotelReservationAPI.Enum;
 using HotelReservationAPI.Exceptions;
 
 using HotelReservationAPI.Helper;
+using HotelReservationAPI.Models;
 using HotelReservationAPI.Services;
 
 using HotelReservationAPI.Validators.Rooms;
@@ -33,6 +34,8 @@ namespace HotelReservationAPI.Controllers
             _UpdateRoomViewModelValidator = new UpdateRoomViewModelValidators();
         }
         [HttpGet("GetAll")]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<PagedList<GetAllRoomViewModel>>> GetAllAvaliabiltyRoom(int page, int pageSize)
 
         {
@@ -48,6 +51,8 @@ namespace HotelReservationAPI.Controllers
 
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Customer")]
+
         public async Task<ResponseViewModel<GetRoomByIdViewModel>> GetRoomById(int id)
         {
 
@@ -65,6 +70,7 @@ namespace HotelReservationAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "HotelStaff")]
         public async Task<ResponseViewModel<bool>> Add(AddRoomViewModel addRoomViewModel)
         {
             var validationResult = _AddRoomViewModelValidator.Validate(addRoomViewModel);
@@ -82,6 +88,7 @@ namespace HotelReservationAPI.Controllers
             return ResponseViewModel<bool>.Success(true);
         }
         [HttpPut]
+        [Authorize(Roles = "HotelStaff")]
         public async Task<ResponseViewModel<bool>> Update(UpdateRoomViewModel updateRoomViewModel)
         {
             var validationResult = _UpdateRoomViewModelValidator.Validate(updateRoomViewModel);
@@ -105,6 +112,8 @@ namespace HotelReservationAPI.Controllers
             //return new SuccessResponseViewModel<bool>(true);
         }
         [HttpDelete]
+        [Authorize(Roles = "HotelStaff")]
+
         public async Task<ResponseViewModel<bool>> Delete(int id)
         {
             if (id < 1)
